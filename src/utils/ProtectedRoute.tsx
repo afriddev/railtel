@@ -1,10 +1,14 @@
+import Home from "@/app/features/Home";
 import { ReactNode } from "react";
 
-interface ProtectedRouteInterface {
-  children: ReactNode;
-}
 
-function ProtectedRoute({ children }: ProtectedRouteInterface) {
-  return <div>{children}</div>;
+function ProtectedRoute() {
+  return <div className="w-full h-full">
+
+    <Home />
+
+
+
+  </div>;
 }
 export default ProtectedRoute;

@@ -1,21 +1,25 @@
-"use client"
+"use client";
 import { contextType, dispatchDataType } from "@/types/AppContextDatatypes";
 import { createContext, ReactNode, useContext, useReducer } from "react";
 
 const initState: contextType = {
   dispatch: () => {},
   step: 1,
+  selectedMenu: {
+    index: 0,
+    title: "Dashboard",
+    desc: "Railtel Dashboard change modify users and more...",
+  },
 };
 
 const contextProvider = createContext(initState);
 
 function reducer(state: contextType, action: dispatchDataType) {
   switch (action?.type) {
-    case "setSelectedMethod":
+    case "setSelectedMenu":
       return {
         ...state,
-        selectedMethod: action?.payload?.method,
-        selectedStudent: action?.payload?.data,
+        selectedMenu: action?.payload,
       };
 
     default:
@@ -23,13 +27,14 @@ function reducer(state: contextType, action: dispatchDataType) {
   }
 }
 export default function AppContext({ children }: { children: ReactNode }) {
-  const [{ step }, dispatch] = useReducer(reducer, initState);
+  const [{ step, selectedMenu }, dispatch] = useReducer(reducer, initState);
 
   return (
     <contextProvider.Provider
       value={{
         dispatch,
         step,
+        selectedMenu,
       }}
     >
       {children}

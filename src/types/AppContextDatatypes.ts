@@ -7,4 +7,9 @@ export type dispatchDataType = {
 export type contextType = {
     dispatch: React.Dispatch<dispatchDataType>
     step:number
+    selectedMenu:{
+      title:string;
+      desc:string;
+      index:number
+    }
 }
