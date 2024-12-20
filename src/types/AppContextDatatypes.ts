@@ -12,4 +12,5 @@ export type contextType = {
       desc:string;
       index:number
     }
+    refreshData:boolean
 }

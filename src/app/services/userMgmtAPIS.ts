@@ -23,3 +23,9 @@ export async function addUserAPI(data: userType) {
   const response = await server.json();
   return response;
 }
+
+export async function getUsersAPI() {
+  const server = await fetch("/api/getusers");
+  const response = await server.json();
+  return response;
+}

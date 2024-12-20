@@ -1,5 +1,4 @@
 import Home from "@/app/features/Home";
-import { ReactNode } from "react";
 
 
 function ProtectedRoute() {

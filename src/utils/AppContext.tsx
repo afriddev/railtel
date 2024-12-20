@@ -10,6 +10,7 @@ const initState: contextType = {
     title: "Dashboard",
     desc: "Railtel Dashboard change modify users and more...",
   },
+  refreshData: false,
 };
 
 const contextProvider = createContext(initState);
@@ -21,13 +22,21 @@ function reducer(state: contextType, action: dispatchDataType) {
         ...state,
         selectedMenu: action?.payload,
       };
+    case "setRefreshData":
+      return {
+        ...state,
+        refreshData: !state.refreshData,
+      };
 
     default:
       throw new Error("Action unkonwn");
   }
 }
 export default function AppContext({ children }: { children: ReactNode }) {
-  const [{ step, selectedMenu }, dispatch] = useReducer(reducer, initState);
+  const [{ step, selectedMenu, refreshData }, dispatch] = useReducer(
+    reducer,
+    initState
+  );
 
   return (
     <contextProvider.Provider
@@ -35,6 +44,7 @@ export default function AppContext({ children }: { children: ReactNode }) {
         dispatch,
         step,
         selectedMenu,
+        refreshData,
       }}
     >
       {children}

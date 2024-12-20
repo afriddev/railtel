@@ -15,6 +15,12 @@ export const FEMALE = "Female";
 export const SUBMIT = "Submit";
 export const DESIGNATION = 'Designation'
 export const DEPARTMENT = "Department"
+export const SNO = "S No"
+export const EMAIL_ID = "Email Id"
+export const FIRST_NAME = "First Name"
+export const LAST_NAME = "Last Name"
+
+
 
 // validations
 export const FIRST_NAME_ERROR = "Please enter First Name";

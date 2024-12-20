@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client ";
-import {
-  useAddUser,
-  useGetDesignatinsAndDepartments,
-} from "@/app/hooks/userMgmHooks";
+import { useAddUser } from "@/app/hooks/userMgmHooks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -26,13 +23,19 @@ import {
   MALE,
   SUBMIT,
 } from "@/utils/AppConstants";
+import { useAppContext } from "@/utils/AppContext";
 import AppSpinner from "@/utils/AppSpinner";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaAsterisk, FaBlackTie } from "react-icons/fa";
 import { IoDesktopSharp } from "react-icons/io5";
 
-function EmployeeForm() {
+interface EmployeeFormInterface {
+  designations: designationType[];
+  departments: departmentType[];
+}
+
+function EmployeeForm({ departments, designations }: EmployeeFormInterface) {
   const {
     formState,
     register,
@@ -43,34 +46,15 @@ function EmployeeForm() {
     setValue,
     reset,
   } = useForm();
-  const { data, isPending, getDesignationsAndDepartments } =
-    useGetDesignatinsAndDepartments();
 
   const { isPending: isLoading, addUser } = useAddUser();
 
   const { errors } = formState;
-  const [designations, setDesignations] = useState<
-    undefined | designationType[]
-  >(undefined);
-  const [departments, setDepartments] = useState<undefined | departmentType[]>(
-    undefined
-  );
+
   const [designation, setDesignation] = useState<string>("");
   const [department, setDepartment] = useState<string>("");
   const { toast } = useToast();
-
-  useEffect(() => {
-    if (!data) {
-      getDesignationsAndDepartments(undefined, {
-        onSuccess(data) {
-          if (data?.message === "SUCCESS") {
-            setDesignations(data?.data?.designations ?? []);
-            setDepartments(data?.data?.departmemts ?? []);
-          }
-        },
-      });
-    }
-  }, []);
+  const { dispatch } = useAppContext();
 
   function handleSubmitClick() {
     if (!watch("des")) {
@@ -145,6 +129,12 @@ function EmployeeForm() {
               description: `User Added Successfully.`,
             });
             reset();
+            setDepartment("")
+            setDesignation("")
+            dispatch({
+              type: "setRefreshData",
+              payload: "",
+            });
           } else if (data?.message === "USER_ALREADY_EXISTS") {
             toast({
               variant: "destructive",
@@ -329,7 +319,7 @@ function EmployeeForm() {
           </Button>
         </div>
       </form>
-      {(isPending || isLoading) && <AppSpinner />}
+      {isLoading && <AppSpinner />}
     </div>
   );
 }

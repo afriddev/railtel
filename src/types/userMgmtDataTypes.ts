@@ -27,4 +27,5 @@ export type userType = {
   designation: string;
   department: string;
   pasword?: string;
+  id?:number
 };

@@ -10,6 +10,7 @@ import { FaUserPlus } from "react-icons/fa6";
 import { FaBlackTie } from "react-icons/fa";
 import { IoDesktopSharp } from "react-icons/io5";
 import { FaLock } from "react-icons/fa";
+import { IoSearch } from "react-icons/io5";
 
 import { FaAsterisk } from "react-icons/fa";
 
@@ -20,7 +21,6 @@ interface InputInterface extends React.ComponentProps<"input"> {
 
 const Input = React.forwardRef<HTMLInputElement, InputInterface>(
   ({ className, type, icon, mandatory, ...props }, ref) => {
-
     function getIcon(): React.ReactNode {
       switch (icon) {
         case "emailId":
@@ -40,17 +40,17 @@ const Input = React.forwardRef<HTMLInputElement, InputInterface>(
 
         case "pass":
           return <FaLock className="w-4 h-4" />;
+
+        case "search":
+          return <IoSearch className="w-4 h-4" />;
       }
     }
 
-    
     return (
-      <div
-        className="relative flex items-center gap-1"
-        >
+      <div className="relative flex items-center gap-1">
         <div className="absolute top-3 left-2">{getIcon()}</div>
 
-        <input 
+        <input
           ref={ref}
           type={type}
           placeholder={props?.about}
@@ -60,7 +60,9 @@ const Input = React.forwardRef<HTMLInputElement, InputInterface>(
           )}
           {...props}
         />
-        <div className="w-2">{mandatory && <FaAsterisk className="w-2 h-2 text-destructive" />}</div>
+        <div className="w-2">
+          {mandatory && <FaAsterisk className="w-2 h-2 text-destructive" />}
+        </div>
       </div>
     );
   }
