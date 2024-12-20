@@ -1,6 +1,7 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
 import EmployeeForm from "./usermgmtutils/EmployeesForm";
+import DesignationAndDepartmentForm from "./usermgmtutils/DesignationAndDepartmentForm";
 
 function UserMgmt() {
   return (
@@ -27,10 +28,10 @@ function UserMgmt() {
             </TabsContent>
 
             <TabsContent value="designation" className="p-3 border rounded-md">
-              Hello world
+              <DesignationAndDepartmentForm method="DES" />
             </TabsContent>
             <TabsContent value="department" className="p-3 border rounded-md">
-              Hello world
+              <DesignationAndDepartmentForm method="DEP" />
             </TabsContent>
             <TabsContent value="reset" className="p-3 border rounded-md">
               Hello world

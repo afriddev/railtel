@@ -1,7 +1,7 @@
 "use client";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import Home from "./features/Home";
 import ProtectedRoute from "@/utils/ProtectedRoute";
+import { Toaster } from "@/components/ui/toaster"
 
 const queryClient = new QueryClient(); 
 
@@ -11,6 +11,7 @@ function App() {
       <div className="w-full h-screen">
       <ProtectedRoute />
       </div>
+      <Toaster />
     </QueryClientProvider>
   );
 }

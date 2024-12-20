@@ -10,8 +10,6 @@ import { FaUserPlus } from "react-icons/fa6";
 import { FaBlackTie } from "react-icons/fa";
 import { IoDesktopSharp } from "react-icons/io5";
 import { FaLock } from "react-icons/fa";
-import { FaLockOpen } from "react-icons/fa";
-import { FaRegEye } from "react-icons/fa";
 
 import { FaAsterisk } from "react-icons/fa";
 
@@ -22,7 +20,6 @@ interface InputInterface extends React.ComponentProps<"input"> {
 
 const Input = React.forwardRef<HTMLInputElement, InputInterface>(
   ({ className, type, icon, mandatory, ...props }, ref) => {
-    const [clicked, setClicked] = React.useState<boolean>(false);
 
     function getIcon(): React.ReactNode {
       switch (icon) {
@@ -46,34 +43,17 @@ const Input = React.forwardRef<HTMLInputElement, InputInterface>(
       }
     }
 
-    function handleInputClick() {
-      setClicked(true);
-    }
-
-    function handleInputBlur() {
-      setClicked(false);
-    }
-
+    
     return (
       <div
         className="relative flex items-center gap-1"
-        onBlur={handleInputBlur}
-        onClick={handleInputClick}
-      >
+        >
         <div className="absolute top-3 left-2">{getIcon()}</div>
 
-        <div
-          className={`absolute transition-all   duration-100 ease-in-out  text-xs ${
-            clicked || props.value
-              ? "-top-2 left-8 bg-background px-2  rounded-md"
-              : "left-8 top-3"
-          } `}
-        >
-          {props.about}
-        </div>
-        <input
+        <input 
           ref={ref}
           type={type}
+          placeholder={props?.about}
           className={cn(
             "flex h-10 w-full rounded-md border border-input bg-background pr-3 pl-7 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring  disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
             className

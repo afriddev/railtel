@@ -1,19 +1,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client ";
+import {
+  useAddUser,
+  useGetDesignatinsAndDepartments,
+} from "@/app/hooks/userMgmHooks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useToast } from "@/hooks/use-toast";
 import {
+  departmentType,
+  designationType,
+  genderEnum,
+} from "@/types/userMgmtDataTypes";
+import {
+  DEPARTMENT,
   DEPARTMENT_ERROR,
+  DESIGNATION,
   DESIGNATION_ERROR,
+  EMAIL_ID_ERROR,
+  EMAIL_ID_VALID_ERROR,
   FEMALE,
   FIRST_NAME_ERROR,
   GENDER,
-  GENDER_ERROR,
   MALE,
-  PASSWORD_ERROR,
   SUBMIT,
 } from "@/utils/AppConstants";
+import AppSpinner from "@/utils/AppSpinner";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaAsterisk, FaBlackTie } from "react-icons/fa";
 import { IoDesktopSharp } from "react-icons/io5";
@@ -27,24 +41,38 @@ function EmployeeForm() {
     clearErrors,
     setError,
     setValue,
+    reset,
   } = useForm();
+  const { data, isPending, getDesignationsAndDepartments } =
+    useGetDesignatinsAndDepartments();
 
-  // {
-  //   defaultValues:{
-  //     // "gender":"male"
-  //   }
-  // }
+  const { isPending: isLoading, addUser } = useAddUser();
 
   const { errors } = formState;
+  const [designations, setDesignations] = useState<
+    undefined | designationType[]
+  >(undefined);
+  const [departments, setDepartments] = useState<undefined | departmentType[]>(
+    undefined
+  );
+  const [designation, setDesignation] = useState<string>("");
+  const [department, setDepartment] = useState<string>("");
+  const { toast } = useToast();
 
-  function handleSubmitClick() {
-    if (!watch("gender")) {
-      setError("gender", {
-        type: "manual",
-        message: GENDER_ERROR,
+  useEffect(() => {
+    if (!data) {
+      getDesignationsAndDepartments(undefined, {
+        onSuccess(data) {
+          if (data?.message === "SUCCESS") {
+            setDesignations(data?.data?.designations ?? []);
+            setDepartments(data?.data?.departmemts ?? []);
+          }
+        },
       });
     }
+  }, []);
 
+  function handleSubmitClick() {
     if (!watch("des")) {
       setError("des", {
         type: "manual",
@@ -61,44 +89,85 @@ function EmployeeForm() {
   }
 
   function handleGenderSelect(value: "male" | "female") {
-    clearErrors("gender");
     setValue("gender", value);
   }
 
-  function handlePasswordChange(event: any) {
+  function handleEmailIdChange(event: any) {
     const value = event?.target?.value;
-    const passwordRegex =
-      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+    const emailIDRegex = /^\S+@\S+\.\S+$/;
 
-    if (!passwordRegex.test(value)) {
-      clearErrors("password");
+    if (!emailIDRegex.test(value)) {
+      clearErrors("emailid");
       setTimeout(() => {
-        setError("password", {
+        setError("emailid", {
           type: "manual",
-          message: PASSWORD_ERROR,
+          message: EMAIL_ID_VALID_ERROR,
         });
       }, 0);
     } else {
-      clearErrors("password");
+      clearErrors("emailid");
     }
   }
 
   function handleDesignationSelect(value: any) {
-    setValue("des", value?.target?.value);
+    const designation = value?.target?.value;
+    setValue("des", designation);
     clearErrors("des");
+    setDesignation(designation);
   }
 
   function handleDepartmentSelect(value: any) {
-    setValue("dep", value?.target?.value);
+    const department = value?.target?.value;
+    setValue("dep", department);
     clearErrors("dep");
+    setDepartment(department);
+  }
+
+  function handleAddUser(e: any) {
+    addUser(
+      {
+        department: e.dep,
+        designation: e?.des,
+        emailId: e?.emailid,
+        firstName: e?.firstname,
+        lastName: e?.lastname,
+        gender:
+          e?.gender === "male" || !e?.gender
+            ? genderEnum?.MALE
+            : genderEnum?.FEMALE,
+      },
+      {
+        onSuccess(data) {
+          if (data?.message === "SUCCESS") {
+            toast({
+              variant: "constructive",
+              title: "SUCCESS",
+              description: `User Added Successfully.`,
+            });
+            reset();
+          } else if (data?.message === "USER_ALREADY_EXISTS") {
+            toast({
+              variant: "destructive",
+              title: "ERROR",
+              description: `User already exists.`,
+            });
+            reset();
+          } else {
+            toast({
+              variant: "destructive",
+              title: "ERROR",
+              description: `Error occured while adding user!`,
+            });
+          }
+        },
+      }
+    );
   }
 
   return (
     <div>
       <form
-        onSubmit={handleSubmit((e) => {
-          console.log(e);
-        })}
+        onSubmit={handleSubmit(handleAddUser)}
         className="gap-4 flex flex-col  "
       >
         <div className="grid grid-cols-3 gap-6">
@@ -168,11 +237,6 @@ function EmployeeForm() {
                 <FaAsterisk className="w-2 h-2 text-destructive" />
               </div>
             </div>
-            {errors?.gender?.message && (
-              <label className="text-destructive text-xs pl-3 relative -top-2">
-                {errors?.gender?.message as never}
-              </label>
-            )}
           </div>
           <div className="flex h-12  gap-1 relative ">
             <div className="absolute left-2 top-3">
@@ -183,14 +247,16 @@ function EmployeeForm() {
                 <select
                   onChange={handleDesignationSelect}
                   className="border h-10 w-full rounded-md px-2 pl-6"
-                  value={""}
+                  value={designation}
                 >
-                  <option disabled hidden>
-                    Designation
+                  <option value={""} disabled hidden>
+                    {DESIGNATION}
                   </option>
-                  <option value={"1"}>Designation </option>
-                  <option value={"2"}>Designation </option>
-                  <option value={"3"}>Designation </option>
+                  {designations?.map((item: designationType, index: number) => (
+                    <option key={index} value={item?.desShortDesc}>
+                      {item?.desLongDesc}
+                    </option>
+                  ))}
                 </select>
                 <FaAsterisk className="w-2 h-2 text-destructive" />
               </div>
@@ -211,14 +277,16 @@ function EmployeeForm() {
                 <select
                   onChange={handleDepartmentSelect}
                   className="border h-10 w-full rounded-md px-2 pl-6"
-                  value={""}
+                  value={department}
                 >
-                  <option disabled hidden>
-                    Department
+                  <option value={""} disabled hidden>
+                    {DEPARTMENT}
                   </option>
-                  <option value={"1"}>Department 1 </option>
-                  <option value={"2"}>Department 2 </option>
-                  <option value={"3"}>Department 3 </option>
+                  {departments?.map((item: departmentType, index: number) => (
+                    <option key={index} value={item?.depShortDesc}>
+                      {item?.depLongDesc}
+                    </option>
+                  ))}
                 </select>
                 <FaAsterisk className="w-2 h-2 text-destructive" />
               </div>
@@ -232,21 +300,21 @@ function EmployeeForm() {
 
           <div className="h-12">
             <Input
-              about="Password"
-              icon="pass"
-              type="password"
+              about="Email Id"
+              icon="emailId"
               mandatory={true}
-              value={watch("password") ?? ""}
-              {...register("password", {
-                required: PASSWORD_ERROR,
+              value={watch("emailid") ?? ""}
+              {...register("emailid", {
+                required: EMAIL_ID_ERROR,
+                pattern: /^\S+@\S+\.\S+$/,
                 onChange(event) {
-                  handlePasswordChange(event);
+                  handleEmailIdChange(event);
                 },
               })}
             />
-            {errors?.password?.message && (
+            {errors?.emailid?.message && (
               <label className="text-destructive text-xs pl-3 relative -top-1">
-                {errors?.password?.message as never}
+                {errors?.emailid?.message as never}
               </label>
             )}
           </div>
@@ -261,6 +329,7 @@ function EmployeeForm() {
           </Button>
         </div>
       </form>
+      {(isPending || isLoading) && <AppSpinner />}
     </div>
   );
 }

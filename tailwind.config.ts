@@ -38,6 +38,12 @@ export default {
   				DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
+			
+  			constructive: {
+  				DEFAULT: 'hsl(var(--constructive))',
+  				foreground: 'hsl(var(--constructive-foreground))'
+  			},
+
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
