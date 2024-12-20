@@ -1,4 +1,4 @@
-"use client"
+"use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { userType } from "@/types/userMgmtDataTypes";
 import UserTableRow from "./UserTableRow";
@@ -68,15 +68,15 @@ function UserTable({ users }: UserTableInterface) {
   }
   function handleClearSearchClick() {
     setSearchedValue("");
-    setUsersData(users)
+    setUsersData(users);
   }
 
   return (
     <div>
-      <div className="flex justify-between gap-6 items-center">
-        <div className="relative">
+      <div className="flex lg:flex-row flex-col justify-between gap-6 lg:items-center">
+        <div className="relative w-full">
           <Input
-            className="w-[20vw]"
+            className="w-full lg:w-[20vw]"
             about="Search By Name OR Email Id"
             icon="search"
             value={searchedValue}
@@ -107,34 +107,38 @@ function UserTable({ users }: UserTableInterface) {
           </div>
         </div>
       </div>
-      <div className="flex flex-col mt-3">
-        <UserTableRow
-          className="font-semibold"
-          c1={SNO}
-          c2={EMAIL_ID}
-          c3={FIRST_NAME}
-          c4={LAST_NAME}
-          c5={GENDER}
-          c6={DESIGNATION}
-          c7={DEPARTMENT}
-        />
-        {usersData?.slice(from, to)?.map((user: userType, index) => (
+      <div className="flex flex-col mt-3 overflow-auto ">
+        <div className="w-[175v] lg:w-full">
           <UserTableRow
-            key={index}
-            c1={index + 1 + from}
-            c2={user?.emailId}
-            c3={user?.firstName}
-            c4={user?.lastName}
-            c5={user?.gender}
-            c6={user?.designation}
-            c7={user?.department}
+            className="font-semibold"
+            c1={SNO}
+            c2={EMAIL_ID}
+            c3={FIRST_NAME}
+            c4={LAST_NAME}
+            c5={GENDER}
+            c6={DESIGNATION}
+            c7={DEPARTMENT}
           />
-        ))}
-        {(!users || usersData?.length === 0 || !usersData) && (
-          <div className="w-full flex items-center justify-center py-8 border ">
-            No Results!
-          </div>
-        )}
+        </div>
+        <div className="w-[175v] lg:w-full">
+          {usersData?.slice(from, to)?.map((user: userType, index) => (
+            <UserTableRow
+              key={index}
+              c1={index + 1 + from}
+              c2={user?.emailId}
+              c3={user?.firstName}
+              c4={user?.lastName}
+              c5={user?.gender}
+              c6={user?.designation}
+              c7={user?.department}
+            />
+          ))}
+          {(!users || usersData?.length === 0 || !usersData) && (
+            <div className="w-full min-w-[80vw] flex items-center justify-center py-8 border ">
+              No Results!
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -79,11 +79,11 @@ function UserMgmt() {
       <main className="py-4 px-2 w-full flex  flex-col  gap-6">
         <div className="w-full border p-2 rounded-md border-foreground">
           <Tabs className="w-full gap-1 flex  flex-col" defaultValue="employee">
-            <TabsList className="w-full gap-2 border border-foreground/20">
+            <TabsList className="w-full gap-2 border border-foreground/20 grid grid-cols-2 lg:grid-cols-4 h-full">
               <TabsTrigger value="employee" className="w-full">
                 Employees
               </TabsTrigger>
-              <TabsTrigger value="designation" className="w-full">
+              <TabsTrigger   value="designation" className="w-full">
                 Designation master
               </TabsTrigger>
               <TabsTrigger value="department" className="w-full">
@@ -115,7 +115,7 @@ function UserMgmt() {
             >
               <DesignationAndDepartmentForm method="DEP" />
             </TabsContent>
-            <TabsContent value="reset" className="p-3 border rounded-md mt-3">
+            <TabsContent value="reset" className="p-3 border rounded-md mt-3 h-full">
               Hello world
             </TabsContent>
           </Tabs>

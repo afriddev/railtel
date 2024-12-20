@@ -12,5 +12,6 @@ export type contextType = {
       desc:string;
       index:number
     }
-    refreshData:boolean
+    refreshData:boolean;
+    menuOpen:boolean
 }

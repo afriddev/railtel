@@ -160,7 +160,7 @@ function EmployeeForm({ departments, designations }: EmployeeFormInterface) {
         onSubmit={handleSubmit(handleAddUser)}
         className="gap-4 flex flex-col  "
       >
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="h-12 w-full">
             <Input
               mandatory={true}
@@ -211,7 +211,7 @@ function EmployeeForm({ departments, designations }: EmployeeFormInterface) {
                   defaultValue="male"
                   onValueChange={handleGenderSelect}
                 >
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 text-xs lg:text-md">
                     <RadioGroupItem value="male" id="male" />
                     <label className="cursor-pointer" htmlFor="male">
                       {MALE}

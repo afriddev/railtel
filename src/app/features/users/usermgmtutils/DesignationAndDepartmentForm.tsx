@@ -74,7 +74,7 @@ function DesignationAndDepartmentForm({
         className="flex flex-col items-center justify-center gap-6"
         onSubmit={handleSubmit(handleSubmitClick)}
       >
-        <div className="flex gap-20 w-full">
+        <div className="flex gap-4 lg:gap-20 w-full lg:flex-row flex-col">
           <div className="h-12 w-full">
             <Input
               mandatory={true}

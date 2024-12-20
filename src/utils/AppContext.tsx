@@ -11,6 +11,7 @@ const initState: contextType = {
     desc: "Railtel Dashboard change modify users and more...",
   },
   refreshData: false,
+  menuOpen:false
 };
 
 const contextProvider = createContext(initState);
@@ -27,13 +28,20 @@ function reducer(state: contextType, action: dispatchDataType) {
         ...state,
         refreshData: !state.refreshData,
       };
+      
+    case "setMenuOpen":
+      return {
+        ...state,
+        menuOpen: !state.menuOpen,
+      };
+
 
     default:
       throw new Error("Action unkonwn");
   }
 }
 export default function AppContext({ children }: { children: ReactNode }) {
-  const [{ step, selectedMenu, refreshData }, dispatch] = useReducer(
+  const [{ step, selectedMenu, refreshData ,menuOpen}, dispatch] = useReducer(
     reducer,
     initState
   );
@@ -45,6 +53,7 @@ export default function AppContext({ children }: { children: ReactNode }) {
         step,
         selectedMenu,
         refreshData,
+        menuOpen
       }}
     >
       {children}
