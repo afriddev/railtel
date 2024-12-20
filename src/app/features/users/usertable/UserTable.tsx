@@ -74,7 +74,7 @@ function UserTable({ users }: UserTableInterface) {
   return (
     <div>
       <div className="flex lg:flex-row flex-col justify-between gap-6 lg:items-center">
-        <div className="relative w-full">
+        <div className="relative w-full lg:w-fit">
           <Input
             className="w-full lg:w-[20vw]"
             about="Search By Name OR Email Id"

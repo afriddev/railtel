@@ -4,6 +4,7 @@ import { useAddUser } from "@/app/hooks/userMgmHooks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import clientQuery from "@/database/database";
 import { useToast } from "@/hooks/use-toast";
 import {
   departmentType,
@@ -22,6 +23,7 @@ import {
   GENDER,
   MALE,
   SUBMIT,
+  USER_ALREADY_EXISTS_ERROR,
 } from "@/utils/AppConstants";
 import { useAppContext } from "@/utils/AppContext";
 import AppSpinner from "@/utils/AppSpinner";
@@ -76,6 +78,20 @@ function EmployeeForm({ departments, designations }: EmployeeFormInterface) {
     setValue("gender", value);
   }
 
+  async function checkEmailId(emailId: string) {
+    const findedUser =
+      await clientQuery`SELECT "emailId" FROM public.users WHERE "emailId" = ${emailId} `;
+    if (findedUser?.length > 0) {
+      setError("emailid", {
+        type: "manual",
+        message: USER_ALREADY_EXISTS_ERROR,
+      });
+    }
+    else{
+      clearErrors("emailid")
+    }
+  }
+
   function handleEmailIdChange(event: any) {
     const value = event?.target?.value;
     const emailIDRegex = /^\S+@\S+\.\S+$/;
@@ -90,6 +106,7 @@ function EmployeeForm({ departments, designations }: EmployeeFormInterface) {
       }, 0);
     } else {
       clearErrors("emailid");
+      checkEmailId(value);
     }
   }
 
@@ -129,8 +146,8 @@ function EmployeeForm({ departments, designations }: EmployeeFormInterface) {
               description: `User Added Successfully.`,
             });
             reset();
-            setDepartment("")
-            setDesignation("")
+            setDepartment("");
+            setDesignation("");
             dispatch({
               type: "setRefreshData",
               payload: "",
@@ -141,6 +158,8 @@ function EmployeeForm({ departments, designations }: EmployeeFormInterface) {
               title: "ERROR",
               description: `User already exists.`,
             });
+            setDepartment("");
+            setDesignation("");   
             reset();
           } else {
             toast({

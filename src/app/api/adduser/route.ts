@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   ) {
     return NextResponse.json(
       {
-        message: "INVALID_PAYLOAD",
+        message: "INVALID_PAYLOAD", 
       },
       { status: 401 }
     );
