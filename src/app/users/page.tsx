@@ -1,4 +1,4 @@
-"use client "
+"use client"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
 import EmployeeForm from "./usermgmtutils/EmployeesForm";

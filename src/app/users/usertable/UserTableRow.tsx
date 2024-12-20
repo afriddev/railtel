@@ -1,5 +1,5 @@
 
-
+"use client"
 interface UserTableRowInterface {
   c1: string | number;
   c2: string;

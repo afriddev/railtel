@@ -1,3 +1,4 @@
+"use client"
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { userType } from "@/types/userMgmtDataTypes";
 import UserTableRow from "./UserTableRow";

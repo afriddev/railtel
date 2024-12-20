@@ -1,3 +1,4 @@
+"use client"
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useAddDesignationAndDepartment } from "@/app/hooks/userMgmHooks";
 import { Button } from "@/components/ui/button";
