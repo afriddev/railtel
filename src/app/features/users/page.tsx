@@ -10,13 +10,14 @@ import {
   designationType,
   userType,
 } from "@/types/userMgmtDataTypes";
-import {
-  useGetDesignatinsAndDepartments,
-  useGetUsers,
-} from "../hooks/userMgmHooks";
+
 import AppSpinner from "@/utils/AppSpinner";
 import { useToast } from "@/hooks/use-toast";
 import { useAppContext } from "@/utils/AppContext";
+import { useGetDesignatinsAndDepartments, useGetUsers } from "@/app/hooks/userMgmHooks";
+
+
+
 
 function UserMgmt() {
   const { isPending, getDesignationsAndDepartments } =
@@ -71,9 +72,9 @@ function UserMgmt() {
     });
   }
 
-  // if (isPending || isLoading) return <AppSpinner />;
 
   return (
+
     <div className="w-full h-full flex ">
       <main className="py-4 px-2 w-full flex  flex-col  gap-6">
         <div className="w-full border p-2 rounded-md border-foreground">
@@ -125,7 +126,7 @@ function UserMgmt() {
         </div>
       </main>
       {(isPending || isLoading) && <AppSpinner />}
-    </div>
+    </div> 
   );
 }
 export default UserMgmt;
