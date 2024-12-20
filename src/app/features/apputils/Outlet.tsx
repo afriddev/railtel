@@ -1,7 +1,7 @@
 import Dashboard from "@/app/dashboard/page";
 import AppMenu from "./AppMenu";
 import { useAppContext } from "@/utils/AppContext";
-import UserMgmt from "../users/page";
+import UserMgmt from "../users/UserPage";
 
 function Outlet() {
   const { selectedMenu } = useAppContext();
